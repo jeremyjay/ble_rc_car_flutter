@@ -1,53 +1,42 @@
-import 'dart:io';
-import 'touch_control.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'about_screen.dart';
+import 'settngs_screen.dart';
+import 'play_rc_car_screen.dart';
 
+void main() => runApp(MaterialApp(
+  title: 'BLE RC Car!',
+  theme: new ThemeData(scaffoldBackgroundColor: Colors.blue[300]),
+  home: MainScreen(),
+));
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MainScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BLE RC Car!',
-      home: MainScreen(),
-    );
-  }
+  _MainScreenState createState() => _MainScreenState();
 }
 
-
-class MainScreen extends  StatelessWidget
+class _MainScreenState extends State<MainScreen>
 {
+
+  int joystickOption = 1;
+
+  PlayRCCarScreen playRCCarScreen = new PlayRCCarScreen();
+  // SettingsScreen settingsScreen = new SettingsScreen(joystickOption: joystickOption);
+
+  void onJoystickOptionChanged(newJoystickOption)
+  {
+    joystickOption = newJoystickOption;
+  }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.blue[300],
       appBar: AppBar(
         title: Text('BLE RC Car!'),
         ),
       body: _buildButton(context),
     );
   }
-
-//add background fullscreen
-  // @override
-  // Widget build(BuildContext context){
-  //   return Container (
-  //     decoration: BoxDecoration(
-  //       image: DecorationImage(
-  //         image: AssetImage("assets/images/joystick_base.png"), fit: BoxFit.cover)),
-  //     child: Scaffold(
-  //       backgroundColor: Colors.transparent,
-  //       appBar: AppBar(
-  //         title: Text('BLE RC Car!'),
-  //         ),
-  //       body: _buildButton(context),
-  //       ),
-  //   );
-  // }  
-
 
   //button
   Widget _buildButton(BuildContext context)
@@ -67,14 +56,14 @@ class MainScreen extends  StatelessWidget
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PlayRCCarScreen()),
+                  MaterialPageRoute(builder: (context) => playRCCarScreen),
                 );
               },
               child: const Text(
                 'Scan for BLE Devices',
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.red)
+                ),
               ),
             ),
             const SizedBox(height: 30),
@@ -82,7 +71,9 @@ class MainScreen extends  StatelessWidget
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SettingsScreen()),
+                  MaterialPageRoute(builder: (context) => SettingsScreen(
+                    onJoystickOptionChanged,
+                    joystickOption)),
                 );
               },
               child: const Text(
@@ -111,70 +102,3 @@ class MainScreen extends  StatelessWidget
     );
   }
 }
-
-class AboutScreen extends StatelessWidget
-{
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("About"), 
-      ),
-      body: Center(
-        child: Text(
-          'This app was made by\nJeremy Jay',
-          style: TextStyle(fontSize: 25),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-class SettingsScreen extends StatelessWidget
-{
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Settings"),
-      ),
-      body: Center(
-        child: Text(
-          'This is the settings screen',
-          style: TextStyle(fontSize: 25),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-class PlayRCCarScreen extends StatelessWidget
-{
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Scan for Devices"),
-          actions: <Widget>[
-            IconButton(icon: Icon(Icons.list), onPressed: (){}),
-          ],               
-      ),
-      body: new TouchController(),
-    );
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-

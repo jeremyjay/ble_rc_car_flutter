@@ -1,16 +1,7 @@
-# ble_car
+# BLE Controlled RC Car
+An RC car that can be controlled with your cell phone.
 
-A new Flutter project.
+# About This Project
+This repository is divided into 3 sections: Hardware, Firmware, and Software.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+More info about this project can be found on this website: (coming soon!)
