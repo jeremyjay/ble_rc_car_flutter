@@ -17,7 +17,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen>
 {
-  int joystickOption = 1;
+  int joystickOption = 0;
   Color selectedColor = Colors.blueGrey[400];
   Color unselectedColor = Colors.blueGrey[200];
 
@@ -48,10 +48,10 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
             RaisedButton(
               onPressed: () {
-                toggleJoystick(1);
+                toggleJoystick(0);
                 // widget.onJoystickOptionChanged(1);
               },
-              color: joystickOption == 1 ? selectedColor:unselectedColor,
+              color: joystickOption == 0 ? selectedColor:unselectedColor,
               child: Text(
                 "Single Joystick",
                 style: TextStyle(
@@ -61,10 +61,10 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
             RaisedButton(
               onPressed: () {
-                toggleJoystick(2);
+                toggleJoystick(1);
                 // widget.onJoystickOptionChanged(2);
               },
-              color: joystickOption == 2 ? selectedColor:unselectedColor,
+              color: joystickOption == 1 ? selectedColor:unselectedColor,
               child: Text(
                 "Dual Joystick",
                 style: TextStyle(

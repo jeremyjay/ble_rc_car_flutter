@@ -19,7 +19,7 @@ class _MainScreenState extends State<MainScreen>
 
   int joystickOption = 1;
 
-  PlayRCCarScreen playRCCarScreen = new PlayRCCarScreen();
+  // PlayRCCarScreen playRCCarScreen = new PlayRCCarScreen();
   // SettingsScreen settingsScreen = new SettingsScreen(joystickOption: joystickOption);
 
   void onJoystickOptionChanged(newJoystickOption)
@@ -56,8 +56,9 @@ class _MainScreenState extends State<MainScreen>
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => playRCCarScreen),
+                  MaterialPageRoute(builder: (context) => new PlayRCCarScreen(joystickOption: joystickOption)),
                 );
+                
               },
               child: const Text(
                 'Scan for BLE Devices',

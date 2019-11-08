@@ -1,28 +1,63 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
-class SingleJoystick extends StatefulWidget {
+class DualJoystick extends StatelessWidget {
+    final double joystickSize;
+    final ValueChanged<Offset> onJoystickXChanged;
+    final ValueChanged<Offset> onJoystickYChanged;
+
+    const DualJoystick(
+      {
+      @required this.joystickSize, 
+      @required this.onJoystickXChanged,
+      @required this.onJoystickYChanged,
+      });
+
+
+  	Widget build(context) {
+		return new Column(
+      children: <Widget>[
+        Joystick(
+          onJoystickChanged: (Offset offset) => onJoystickXChanged(offset), 
+          height: joystickSize, 
+          width: joystickSize,
+          orientation: 0,
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(0, this.joystickSize/4, 0, 0),
+        ),
+        Joystick(
+          onJoystickChanged: (Offset offset) => onJoystickYChanged(offset), 
+          height: joystickSize, 
+          width: joystickSize,
+          orientation: 1,
+        ),
+      ],
+    );
+	}
+}
+
+class Joystick extends StatefulWidget {
   final double width;
   final double height;
   final double xPos;
   final double yPos;
-
+  final double orientation;
   final ValueChanged<Offset> onJoystickChanged;
 
-  const SingleJoystick({
+  const Joystick({
     @required this.onJoystickChanged,
     @required this.width, 
     @required this.height,
+    @required this.orientation,
     this.xPos = 0,
     this.yPos = 0,
     });
 
   @override
-  _SingleJoystickState createState() => _SingleJoystickState();
+  _JoystickState createState() => _JoystickState();
 }
 
-class _SingleJoystickState extends State<SingleJoystick> {
+class _JoystickState extends State<Joystick> {
 
   double _panXPosition = 0;
   double _panYPosition = 0;
@@ -50,26 +85,37 @@ class _SingleJoystickState extends State<SingleJoystick> {
       double dx = val.dx - _panStartXOffset + widget.width/2;
       double dy = val.dy - _panStartYOffset + widget.height/2;
 
-      double temp_x2 = pow((dx - widget.width/2), 2);
-      double temp_y2 = pow((dy - widget.height/2), 2);
-
-      if( sqrt(temp_x2 + temp_y2) > widget.width/2)
+      if(widget.orientation == 0)
       {
-        double theta = atan((-dy+widget.height/2)/(dx-widget.width/2));
-        if(dx < widget.width/2)
+        newPanYPosition = widget.height/2;
+        if(dx < 0)
         {
-          newPanXPosition = -widget.width/2 * cos(theta) + widget.width/2;
-          newPanYPosition = widget.height/2 * sin(theta) + widget.height/2;
+          newPanXPosition = 0;
+        }
+        else if (dx > widget.width)
+        {
+          newPanXPosition = widget.width;
         }
         else
         {
-          newPanXPosition = widget.width/2 * cos(theta) + widget.width/2;
-          newPanYPosition = -widget.height/2 * sin(theta) + widget.height/2;
+          newPanXPosition = dx;
         }
       }
-      else {
-          newPanXPosition = dx;
+      else if(widget.orientation == 1)
+      {
+        newPanXPosition = widget.width/2;
+        if(dy < 0)
+        {
+          newPanYPosition = 0;
+        }
+        else if (dy > widget.height)
+        {
+          newPanYPosition = widget.height;
+        }
+        else
+        {
           newPanYPosition = dy;
+        }
       }
 
       setState(() {
@@ -126,6 +172,7 @@ class _SingleJoystickState extends State<SingleJoystick> {
               joystickXPosition: _panXPosition,
               joystickYPosition: _panYPosition,
               origin: Offset(widget.width/2, widget.height/2),
+              orientation: widget.orientation,
               ),
           ),
         ),
@@ -140,13 +187,11 @@ class _SingleJoystickState extends State<SingleJoystick> {
 
 
 
-
-
-
 class JoystickPainter extends CustomPainter {
   double joystickXPosition = 0;
   double joystickYPosition = 0;
   Offset origin;
+  double orientation = 0;
 
   Color color = Colors.red;
   // ui.Image image;
@@ -158,6 +203,7 @@ class JoystickPainter extends CustomPainter {
     @required this.joystickYPosition,
     @required this.color,
     @required this.origin,
+    @required this.orientation,
     // @required this.image,
   }): joystickPainter = Paint()
     ..color = Colors.blueGrey
@@ -186,11 +232,30 @@ class JoystickPainter extends CustomPainter {
   }
 
   void _paintJoystick(Canvas canvas, Size size) {
+    
+    if(orientation == 1)
+    {
+      Rect foreRect = new Rect.fromLTRB(origin.dx*2/3, 0, origin.dx*4/3, origin.dx*2);
+      canvas.drawRect(foreRect, joystickForeground);
+      canvas.drawRect(foreRect, joystickCircles);
+
+      foreRect = Rect.fromLTRB(origin.dx*5/6, 0, origin.dx*7/6, origin.dx*2);
+      canvas.drawRect(foreRect, joystickBackground);
+      canvas.drawRect(foreRect, joystickCircles);
+    }
+    else 
+    {
+      Rect foreRect = new Rect.fromLTRB(0, origin.dx*2/3, origin.dx*2, origin.dx*4/3);
+      canvas.drawRect(foreRect, joystickForeground);
+      canvas.drawRect(foreRect, joystickCircles);
+
+      foreRect = Rect.fromLTRB(0, origin.dx*5/6, origin.dx*2, origin.dx*7/6);
+      canvas.drawRect(foreRect, joystickBackground);
+      canvas.drawRect(foreRect, joystickCircles);
+    }
+
     //background
-    canvas.drawCircle(Offset(origin.dx, origin.dy), origin.dx, joystickForeground);
-    canvas.drawCircle(Offset(origin.dx, origin.dy), origin.dx*8/10, joystickBackground);
-    canvas.drawCircle(Offset(origin.dx, origin.dy), origin.dx*8/10, joystickCircles);
-    canvas.drawCircle(Offset(origin.dx, origin.dy), origin.dx, joystickCircles);
+
 
     //nub at origin
     canvas.drawCircle(Offset(origin.dx, origin.dy), origin.dx/10, joystickPainter);
