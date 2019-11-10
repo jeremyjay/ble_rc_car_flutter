@@ -50,10 +50,10 @@ class _SingleJoystickState extends State<SingleJoystick> {
       double dx = val.dx - _panStartXOffset + widget.width/2;
       double dy = val.dy - _panStartYOffset + widget.height/2;
 
-      double temp_x2 = pow((dx - widget.width/2), 2);
-      double temp_y2 = pow((dy - widget.height/2), 2);
+      double tempX2 = pow((dx - widget.width/2), 2);
+      double tempY2 = pow((dy - widget.height/2), 2);
 
-      if( sqrt(temp_x2 + temp_y2) > widget.width/2)
+      if( sqrt(tempX2 + tempY2) > widget.width/2)
       {
         double theta = atan((-dy+widget.height/2)/(dx-widget.width/2));
         if(dx < widget.width/2)

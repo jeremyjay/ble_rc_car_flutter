@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'about_screen.dart';
+import 'scan_ble.dart';
 import 'settngs_screen.dart';
 import 'play_rc_car_screen.dart';
 
@@ -56,7 +57,8 @@ class _MainScreenState extends State<MainScreen>
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => new PlayRCCarScreen(joystickOption: joystickOption)),
+                  // MaterialPageRoute(builder: (context) => new PlayRCCarScreen(joystickOption: joystickOption)),
+                  MaterialPageRoute(builder: (context) => new FlutterBlueApp()),
                 );
                 
               },
